@@ -102,7 +102,7 @@ endfunction
 " Damian-Conway-s-Vim-Setup/blob/master/plugin/hlnext.vim
 function! HLNext ()
   call HLNextOff()
-  let target_pat = '\c\%#'.@/
+  let target_pat = '\c\%#\%('.@/.'\)'
   let w:HLNext_matchnum = matchadd('MatchParen', target_pat)
   redraw
 endfunction

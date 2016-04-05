@@ -1,7 +1,9 @@
 " Copyright (C) 2016 Xiaolong Wang  <dragonxlwang@gmail.com>
 "
 " Part of the file was ripped from:
-"
+" https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup
+" https://github.com/amix/vimrc
+" https://github.com/tpope/vim-sensible
 
 " =============================- Keymap: Search -===============================
 

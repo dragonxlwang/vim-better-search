@@ -11,9 +11,10 @@
 " space: Clear search history
 " *: Visual mode pressing * searches for the current selection afterward
 " #: Visual mode pressing # searches for the current selection backword
-" <leader>gvc: Vimgrep visual-selected in current file
+" <leader>gvf: Vimgrep visual-selected in current file
 " <leader>gvd: Vimgrep visual-selected in project directory
-" <leader>g: Vimgrep in project directory
+" <leader>gf : Vimgrep in current file
+" <leader>gd : Vimgrep in project directory
 " <leader><space>: Vimgreps in the current file
 " <leader>r: Search and replace the selected text
 " <leader>cc, <leader>co: Open quickfix window (in a new tab)
@@ -27,9 +28,10 @@ endif
 nnoremap <space> :noh \| call ColorOff() \| ccl<CR><ESC>
 vnoremap <silent> * :<C-u>call VisualSelection('')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('')<CR>?<C-R>=@/<CR><CR>
-vnoremap gvc :call VisualSelection('gvc')<Bar>set hls<CR>
+vnoremap gvf :call VisualSelection('gvf')<Bar>set hls<CR>
 vnoremap gvd :call VisualSelection('gvd')<Bar>set hls<CR>
-map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
+map <leader>gf :vimgrep // %<left><left><left>
+map <leader>gd :vimgrep // **/*.<left><left><left><left><left><left><left>
 map <leader><space>
       \ :vimgrep // <C-R>%<C-A><Home><right><right><right><right>
       \<right><right><right><right><right>
@@ -57,7 +59,7 @@ function! VisualSelection(direction) range
   execute "normal! vgvy"
   let l:pattern = escape(@", '\\/.*$^~[]')
   let l:pattern = substitute(l:pattern, "\n$", "", "")
-  if a:direction == 'gvc'
+  if a:direction == 'gvf'
     call CmdLine("vimgrep " . '/'. l:pattern . '/g' . ' %')
     " Without the next line, you would have to hit ENTER,
     " even if what is written (the questions) has no interest:

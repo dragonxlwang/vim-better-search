@@ -5,10 +5,10 @@ The following keymap were added:
 - space: Clear search history
 - *: Visual mode pressing * searches for the current selection afterward
 - #: Visual mode pressing # searches for the current selection backword
-- &lt;leader&gt;gvc: Vimgrep visual-selected in current file
+- &lt;leader&gt;gvf: Vimgrep visual-selected in current file
 - &lt;leader&gt;gvd: Vimgrep visual-selected in project directory
-- &lt;leader&gt;g: Vimgrep in project directory
-- &lt;leader&gt;&lt;space&gt;: Vimgreps in the current file
+- &lt;leader&gt;gf: Vimgreps in the current file
+- &lt;leader&gt;gd: Vimgrep in project directory
 - &lt;leader&gt;r: Search and replace the selected text
 - &lt;leader&gt;cc, &lt;leader&gt;co: Open quickfix window (in a new tab)
 - Qflen: Command to show total number of matches in quickfix (matches, errors)
@@ -20,3 +20,4 @@ issues it tries to resolve:
 - */# search current word or visual selection
 - redraw and remove highlight
 - current match highlighted different from others
+

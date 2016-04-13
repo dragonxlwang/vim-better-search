@@ -4,6 +4,9 @@
 " https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup
 " https://github.com/amix/vimrc
 " https://github.com/tpope/vim-sensible
+" And some useful discussion
+" http://stackoverflow.com/questions/3765798/
+"   vim-search-and-highlighting-control-from-a-script
 
 " =============================- Keymap: Search -===============================
 
@@ -15,7 +18,6 @@
 " <leader>gvd: Vimgrep visual-selected in project directory
 " <leader>gf : Vimgrep in current file
 " <leader>gd : Vimgrep in project directory
-" <leader><space>: Vimgreps in the current file
 " <leader>r: Search and replace the selected text
 " <leader>cc, <leader>co: Open quickfix window (in a new tab)
 " Qflen: Command to show total number of matches in quickfix (matches, errors)
@@ -26,25 +28,23 @@ if maparg('<C-L>', 'n') ==# ''
         \<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
 nnoremap <space> :noh \| call ColorOff() \| ccl<CR><ESC>
-vnoremap <silent> * :<C-u>call VisualSelection('')<CR>/<C-R>=@/<CR><CR>
-vnoremap <silent> # :<C-u>call VisualSelection('')<CR>?<C-R>=@/<CR><CR>
-vnoremap gvf :call VisualSelection('gvf')<Bar>set hls<CR>
-vnoremap gvd :call VisualSelection('gvd')<Bar>set hls<CR>
-map <leader>gf :vimgrep // %<left><left><left>
-map <leader>gd :vimgrep // **/*.<left><left><left><left><left><left><left>
-map <leader><space>
-      \ :vimgrep // <C-R>%<C-A><Home><right><right><right><right>
-      \<right><right><right><right><right>
+vnoremap <silent> * :call VisualSelection('f')<CR>:set hls<CR>
+vnoremap <silent> # :call VisualSelection('b')<CR>:set hls<CR>
+vnoremap <leader>gvf :call VisualSelection('gvf')<BAR>set hls<CR>
+vnoremap <leader>gvd :call VisualSelection('gvd')<BAR>set hls<CR>
+command! -nargs=* VimgrepIn :call VimgrepSelection(<f-args>)<BAR>set hls
+nnoremap <leader>gf :VimgrepIn   %<left><left><left>
+nnoremap <leader>gd :VimgrepIn  **/*.<left><left><left><left><left><left>
 vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
-map <leader>cc :botright cope<cr>
-map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+map <leader>cc :botright cope<CR>
+map <leader>co ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
 command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 " Highlight current match different from others
-nnoremap <silent> n n:call HLNext()<cr>
-nnoremap <silent> N N:call HLNext()<cr>
-nnoremap <silent> <leader>n :cn \| call HLNext() \| set hls<cr>
-nnoremap <silent> <leader>N :cp \| call HLNext() \| set hls<cr>
+nnoremap <silent> <leader>n :cn<CR>:call HLNext()<CR>:set hls<CR>
+nnoremap <silent> <leader>N :cp<CR>:call HLNext()<CR>:set hls<CR>
+nnoremap <silent> n n:call HLNext()<CR>
+nnoremap <silent> N N:call HLNext()<CR>
 nnoremap <unique> / :call HLNextSetTrigger()<CR>/
 nnoremap <unique> ? :call HLNextSetTrigger()<CR>?
 
@@ -54,27 +54,37 @@ function! CmdLine(str)
   unmenu Foo
 endfunction
 
-function! VisualSelection(direction) range
+function! VimgrepSelection(pattern, scope)
+  execute "vimgrep " . '/' . a:pattern . '/g ' . a:scope
+  botright cw
+  wincmd p
+  call HLNextSetTrigger()
+  let @/ = a:pattern
+endfunction
+
+function! VisualSelection(cmd) range
   let l:saved_reg = @"
   execute "normal! vgvy"
   let l:pattern = escape(@", '\\/.*$^~[]')
   let l:pattern = substitute(l:pattern, "\n$", "", "")
-  if a:direction == 'gvf'
+  if a:cmd == 'gvf'
     call CmdLine("vimgrep " . '/'. l:pattern . '/g' . ' %')
     " Without the next line, you would have to hit ENTER,
     " even if what is written (the questions) has no interest:
     call feedkeys(" ")
     botright cw
     wincmd p
-  elseif a:direction == 'gvd'
+  elseif a:cmd == 'gvd'
     call CmdLine("vimgrep " . '/'. l:pattern . '/g' . ' **/*.')
-    " Without the next line, you would have to hit ENTER,
-    " even if what is written (the questions) has no interest:
     call feedkeys(" ")
     botright cw
     wincmd p
-  elseif a:direction == 'replace'
-    call CmdLine("%s" . '/'. l:pattern . '/')
+  elseif a:cmd == 'replace'
+    call CmdLine("%s" . '/'. l:pattern . '//gc<left><left><left>')
+  elseif a:cmd == 'f'
+    execute "normal /" . l:pattern . "\<CR>"
+  elseif a:cmd == 'b'
+    execute "normal ?" . l:pattern . "\<CR>"
   endif
   call HLNextSetTrigger()
   let @/ = l:pattern

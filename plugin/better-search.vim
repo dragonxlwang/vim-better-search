@@ -117,7 +117,7 @@ endfunction
 function! HLNext ()
   call HLNextOff()
   let target_pat = '\c\%#\%('.@/.'\)'
-  let w:HLNext_matchnum = matchadd('MatchParen', target_pat)
+  let w:HLNext_matchnum = matchadd('IncSearch', target_pat)
   redraw
 endfunction
 " Clear previous highlighting (if any)...

@@ -47,6 +47,8 @@ nnoremap <silent> n n:call HLNext()<CR>
 nnoremap <silent> N N:call HLNext()<CR>
 nnoremap <unique> / :call HLNextSetTrigger()<CR>/
 nnoremap <unique> ? :call HLNextSetTrigger()<CR>?
+nnoremap <unique> * :call HLNextSetTrigger()<CR>*
+nnoremap <unique> # :call HLNextSetTrigger()<CR>#
 
 function! CmdLine(str)
   exe "menu Foo.Bar :" . a:str

@@ -36,7 +36,7 @@ command! -nargs=* VimgrepIn :call VimgrepSelection(<f-args>)<BAR>set hls
 nnoremap <leader>gf :VimgrepIn   %<left><left><left>
 nnoremap <leader>gd :VimgrepIn  **/*.<left><left><left><left><left><left>
 vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
-map <leader>cc :botright cope<CR>
+map <leader>cc :call CopenToggle()<CR>
 map <leader>co ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
 command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
@@ -49,6 +49,14 @@ nnoremap <unique> / :call HLNextSetTrigger()<CR>/
 nnoremap <unique> ? :call HLNextSetTrigger()<CR>?
 nnoremap <unique> * :call HLNextSetTrigger()<CR>*
 nnoremap <unique> # :call HLNextSetTrigger()<CR>#
+
+function! CopenToggle()
+    let l:c = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+    silent! cclose
+    if l:c == len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+      execute "silent! copen "
+    endif
+endfunction
 
 function! CmdLine(str)
   exe "menu Foo.Bar :" . a:str

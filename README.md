@@ -13,6 +13,7 @@ The following keymap were added:
 - &lt;leader&gt;cc, &lt;leader&gt;co: Open quickfix window (in a new tab)
 - Qflen: Command to show total number of matches in quickfix (matches, errors)
 - z/: Highlight all instances of word under cursor
+- &lt;leader&gt;rr : Forward (with loop) substitution
 
 issues it tries to resolve:
 - automatic highlight current word

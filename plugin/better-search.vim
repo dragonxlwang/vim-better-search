@@ -1,5 +1,4 @@
 " Copyright (C) 2016 Xiaolong Wang  <dragonxlwang@gmail.com>
-"
 " Part of the file was ripped from:
 " https://github.com/thoughtstream/Damian-Conway-s-Vim-Setup
 " https://github.com/amix/vimrc
@@ -22,6 +21,7 @@
 " <leader>cc, <leader>co: Open quickfix window (in a new tab)
 " Qflen: Command to show total number of matches in quickfix (matches, errors)
 " z/: Highlight all instances of word under cursor
+" <leader>rr : Forward (with loop) substitution
 
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch \| call ColorOff() \| ccl
@@ -40,6 +40,8 @@ map <leader>cc :call CopenToggle()<CR>
 map <leader>co ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
 command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+" Forward (with loop) substitution
+nnoremap <leader>rr :,$s//gc<BAR>1,''-&&<home><right><right><right><right>
 " Highlight current match different from others
 nnoremap <silent> <leader>n :cn<CR>:call HLNext()<CR>:set hls<CR>
 nnoremap <silent> <leader>N :cp<CR>:call HLNext()<CR>:set hls<CR>

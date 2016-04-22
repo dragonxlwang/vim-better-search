@@ -33,8 +33,9 @@ vnoremap <silent> # :call VisualSelection('b')<CR>:set hls<CR>
 vnoremap <leader>gvf :call VisualSelection('gvf')<BAR>set hls<CR>
 vnoremap <leader>gvd :call VisualSelection('gvd')<BAR>set hls<CR>
 command! -nargs=* VimgrepIn :call VimgrepSelection(<f-args>)<BAR>set hls
-nnoremap <leader>gf :VimgrepIn   %<left><left><left>
-nnoremap <leader>gd :VimgrepIn  **/*.<left><left><left><left><left><left>
+nnoremap <leader>gf :VimgrepIn //g %<left><left><left><left>
+nnoremap <leader>gd :VimgrepIn //g **/*.
+      \<left><left><left><left><left><left><left><left>
 vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
 map <leader>cc :call CopenToggle()<CR>
 map <leader>co ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
@@ -67,7 +68,7 @@ function! CmdLine(str)
 endfunction
 
 function! VimgrepSelection(pattern, scope)
-  execute "vimgrep " . '/' . a:pattern . '/g ' . a:scope
+  execute "vimgrep " . a:pattern . " " . a:scope
   botright cw
   wincmd p
   call HLNextSetTrigger()

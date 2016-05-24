@@ -41,6 +41,7 @@ map <leader>cc :call CopenToggle()<CR>
 map <leader>co ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
 command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+vnoremap z/ :call VisualHighlightToggle()<Bar>set hls<CR>
 " Forward (with loop) substitution
 nnoremap <leader>rr :,$s//gc<BAR>1,''-&&<home><right><right><right><right>
 " Highlight current match different from others
@@ -54,11 +55,11 @@ nnoremap <unique> * :call HLNextSetTrigger()<CR>*
 nnoremap <unique> # :call HLNextSetTrigger()<CR>#
 
 function! CopenToggle()
-    let l:c = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
-    silent! cclose
-    if l:c == len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
-      execute "silent! copen "
-    endif
+  let l:c = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+  silent! cclose
+  if l:c == len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+    execute "silent! copen "
+  endif
 endfunction
 
 function! CmdLine(str)
@@ -112,56 +113,66 @@ function! AutoHighlightToggle()
   if exists('#auto_highlight')
     au! auto_highlight
     augroup! auto_highlight
-    setl updatetime&
-    echo 'Highlight current word: off'
-    return 0
-  else
-    augroup auto_highlight
-      au!
-      au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
-    augroup end
-    setl updatetime=500
-    echo 'Highlight current word: ON'
-    return 1
-  endif
-endfunction
+      setl updatetime&
+      echo 'Highlight current word: off'
+      return 0
+    else
+      augroup auto_highlight
+        au!
+        au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+      augroup end
+      setl updatetime=500
+      echo 'Highlight current word: ON'
+      return 1
+    endif
+  endfunction
 
-" Damian-Conway-s-Vim-Setup/blob/master/plugin/hlnext.vim
-function! HLNext ()
-  call HLNextOff()
-  let target_pat = '\c\%#\%('.@/.'\)'
-  let w:HLNext_matchnum = matchadd('IncSearch', target_pat)
-  redraw
-endfunction
-" Clear previous highlighting (if any)...
-function! HLNextOff ()
-  if exists('w:HLNext_matchnum')
-    call matchdelete(w:HLNext_matchnum)
+  function! VisualHighlightToggle() range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+    call HLNextSetTrigger()
+    let @/ = l:pattern
+    let @" = l:saved_reg
+  endfunction
+
+  " Damian-Conway-s-Vim-Setup/blob/master/plugin/hlnext.vim
+  function! HLNext ()
+    call HLNextOff()
+    let target_pat = '\c\%#\%('.@/.'\)'
+    let w:HLNext_matchnum = matchadd('IncSearch', target_pat)
     redraw
-    unlet w:HLNext_matchnum
-  endif
-endfunction
-" Prepare to active next-match highlighting after cursor moves...
-function! HLNextSetTrigger ()
-  augroup HLNext
-    autocmd!
-    autocmd  CursorMoved  *  :call HLNextMovedTrigger()
-  augroup END
-endfunction
-" Highlight and then remove activation of next-match highlighting...
-function! HLNextMovedTrigger ()
-  au! HLNext
-  augroup! HLNext
-  call HLNext()
-endfunction
+  endfunction
+  " Clear previous highlighting (if any)...
+  function! HLNextOff ()
+    if exists('w:HLNext_matchnum')
+      call matchdelete(w:HLNext_matchnum)
+      redraw
+      unlet w:HLNext_matchnum
+    endif
+  endfunction
+  " Prepare to active next-match highlighting after cursor moves...
+  function! HLNextSetTrigger ()
+    augroup HLNext
+      autocmd!
+      autocmd  CursorMoved  *  :call HLNextMovedTrigger()
+    augroup END
+  endfunction
+  " Highlight and then remove activation of next-match highlighting...
+  function! HLNextMovedTrigger ()
+    au! HLNext
+    augroup! HLNext
+      call HLNext()
+    endfunction
 
-function! ColorOff()
-  if exists('#auto_highlight')
-    au! auto_highlight
-    augroup! auto_highlight
-    setl updatetime&
-    echo 'Highlight current word: off'
-    return 0
-  endif
-  call HLNextOff()
-endfunction
+    function! ColorOff()
+      if exists('#auto_highlight')
+        au! auto_highlight
+        augroup! auto_highlight
+          setl updatetime&
+          echo 'Highlight current word: off'
+          return 0
+        endif
+        call HLNextOff()
+      endfunction

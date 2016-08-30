@@ -73,7 +73,9 @@ function! VimgrepSelection(pattern, scope)
   botright cw
   wincmd p
   call HLNextSetTrigger()
-  let @/ = a:pattern
+  let l:pattern = substitute(a:pattern, "^/", "", "")
+  let l:pattern = substitute(l:pattern, "/.*$", "", "")
+  let @/ = l:pattern
 endfunction
 
 function! VisualSelection(cmd) range

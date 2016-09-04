@@ -144,13 +144,12 @@ function! HLNext ()
   call HLNextOff()
   let target_pat = '\c\%#\%('.@/.'\)'
   let w:HLNext_matchnum = matchadd('IncSearch', target_pat)
-  redraw
+  redraw!
 endfunction
 " Clear previous highlighting (if any)...
 function! HLNextOff ()
   if exists('w:HLNext_matchnum')
     call matchdelete(w:HLNext_matchnum)
-    redraw
     unlet w:HLNext_matchnum
   endif
 endfunction
@@ -178,4 +177,5 @@ function! ColorOff()
       return 0
   endif
   call HLNextOff()
+  redraw!
 endfunction

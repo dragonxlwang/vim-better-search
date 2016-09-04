@@ -164,7 +164,8 @@ endfunction
 " Highlight and then remove activation of next-match highlighting...
 function! HLNextMovedTrigger ()
   au! HLNext
-  augroup! HLNext
+  " comment out or otherwise W19 is raised, which occurs after patch 7.4-2196
+  " augroup! HLNext
   call HLNext()
 endfunction
 

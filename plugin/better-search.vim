@@ -27,7 +27,7 @@ if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch \| call ColorOff() \| ccl
         \<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
-nnoremap <space> :noh \| call ColorOff() \| ccl<CR><ESC>
+nnoremap <space> :set nornu \| :noh \| call ColorOff() \| ccl<CR><ESC>
 vnoremap <silent> * :call VisualSelection('f')<CR>:set hls<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>:set hls<CR>
 vnoremap <leader>gvf :call VisualSelection('gvf')<BAR>set hls<CR>

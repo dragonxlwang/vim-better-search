@@ -37,7 +37,9 @@ nnoremap <leader>gf :VimgrepIn //g %<left><left><left><left>
 nnoremap <leader>gd :VimgrepIn //g **/*.
       \<left><left><left><left><left><left><left><left>
 vnoremap <silent> <leader>r :call VisualSelection('replace')<CR>
-noremap <leader>cc :call CopenToggle()<CR>
+" noremap <leader>cc :call CopenToggle()<CR>
+noremap <leader>cc :setlocal ignorecase! \|
+      \echoe "ignorecase =" &ignorecase <CR>
 noremap <leader>co ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
 command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>

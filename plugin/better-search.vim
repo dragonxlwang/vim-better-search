@@ -42,7 +42,9 @@ noremap <leader>cc :setlocal ignorecase! \| echoe "ignorecase =" &ignorecase<CR>
 noremap <leader>co ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
 command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
-vnoremap z/ :call VisualHighlightToggle()<Bar>set hls<CR>
+" nmap zh *``
+nnoremap zh :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
+vnoremap zh :call VisualHighlightToggle()<Bar>set hls<CR>
 " Forward (with loop) substitution
 nnoremap <leader>rr :,$s//gc<BAR>1,''-&&<home><right><right><right><right>
 " Highlight current match different from others

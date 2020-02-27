@@ -43,7 +43,7 @@ noremap <leader>co ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
 command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 " nmap zh *``
-nnoremap zh :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
+nnoremap zh :let @/='\c\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 vnoremap zh :call VisualHighlightToggle()<Bar>set hls<CR>
 " Forward (with loop) substitution
 nnoremap <leader>rr :,$s//gc<BAR>1,''-&&<home><right><right><right><right>
@@ -146,6 +146,7 @@ endfunction
 function! HLNext ()
   call HLNextOff()
   let target_pat = '\c\%#\%('.@/.'\)'
+  let @/ = '\c'.@/
   let w:HLNext_matchnum = matchadd('IncSearch', target_pat)
   redraw!
 endfunction

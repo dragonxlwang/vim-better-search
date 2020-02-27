@@ -43,8 +43,8 @@ noremap <leader>co ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
 command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 " nmap zh *``
-nnoremap zh :let @/='\c\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
-vnoremap zh :call VisualHighlightToggle()<Bar>set hls<CR>
+nnoremap zh :let @/='\c\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>:echo @/<CR>
+vnoremap zh :call VisualHighlightToggle()<Bar>set hls<CR>:echo @/<CR>
 " Forward (with loop) substitution
 nnoremap <leader>rr :,$s//gc<BAR>1,''-&&<home><right><right><right><right>
 " Highlight current match different from others

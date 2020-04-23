@@ -27,7 +27,8 @@ if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch \| call ColorOff() \| ccl
         \<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
-nnoremap <space> :set nornu \| :noh \| call ColorOff() \| ccl<CR><ESC>
+nnoremap <space> :call clearmatches() \| :set nornu \| :noh \|
+      \call ColorOff() \| ccl<CR><ESC>
 vnoremap <silent> * :call VisualSelection('f')<CR>:set hls<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>:set hls<CR>
 vnoremap <leader>gvf :call VisualSelection('gvf')<BAR>set hls<CR>
@@ -44,6 +45,7 @@ command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 " nmap zh *``
 nnoremap zh :let @/='\c\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>:echo @/<CR>
+nnoremap zj :call matchadd('IncSearch', '\c\<<C-R>=expand("<cword>")<CR>\>')<CR>
 vnoremap zh :call VisualHighlightToggle()<Bar>set hls<CR>:echo @/<CR>
 " Forward (with loop) substitution
 nnoremap <leader>rr :,$s//gc<BAR>1,''-&&<home><right><right><right><right>

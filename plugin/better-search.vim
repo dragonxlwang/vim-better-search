@@ -24,11 +24,14 @@
 " <leader>rr : Forward (with loop) substitution
 
 if maparg('<C-L>', 'n') ==# ''
-  nnoremap <silent> <C-L> :nohlsearch \| call ColorOff() \| ccl
+  nnoremap <silent> <C-L> :call ColorOff() \| :call clearmatches() \|
+        \ :call MultipleHighlightOff() \| :set nornu \| :noh \| :ccl
         \<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
-nnoremap <silent> <space> :call clearmatches() \| :set nornu \| :noh \|
-      \call ColorOff() \| ccl<CR><ESC>
+" nnoremap <silent> <space> :call clearmatches() \| :set nornu \| :noh \|
+"       \call ColorOff() \| ccl<CR><ESC>
+nnoremap <silent> <space> :call ColorOff() \| :call clearmatches() \|
+      \ :call MultipleHighlightOff() \| :set nornu \| :noh \| :ccl<CR><ESC>
 vnoremap <silent> * :call VisualSelection('f')<CR>:set hls<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>:set hls<CR>
 vnoremap <leader>gvf :call VisualSelection('gvf')<BAR>set hls<CR>
@@ -44,9 +47,11 @@ noremap <leader>co ggVGy:tabnew<CR>:set syntax=qf<CR>pgg
 command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 " nmap zh *``
-nnoremap zh :let @/='\c\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>:echo @/<CR>
-nnoremap zj :call matchadd('IncSearch', '\c\<<C-R>=expand("<cword>")<CR>\>')<CR>
-vnoremap zh :call VisualHighlightToggle()<Bar>set hls<CR>:echo @/<CR>
+" nnoremap zh :let @/='\c\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>:echo @/<CR>
+nnoremap zh :call MultipleHighlightAdd()<CR>:set hls<CR>:echo @/<CR>
+" nnoremap zj :call matchadd('IncSearch', '\c\<<C-R>=expand("<cword>")<CR>\>')<CR>
+" vnoremap zh :call VisualHighlightToggle()<Bar>set hls<CR>:echo @/<CR>
+vnoremap zh :call MultipleHighlightAddVisual()<Bar>:set hls<CR>:echo @/<CR>
 " Forward (with loop) substitution
 nnoremap <leader>rr :,$s//gc<BAR>1,''-&&<home><right><right><right><right>
 " Highlight current match different from others
@@ -58,6 +63,35 @@ nnoremap <unique> / :call HLNextSetTrigger()<CR>/
 nnoremap <unique> ? :call HLNextSetTrigger()<CR>?
 nnoremap <unique> * :call HLNextSetTrigger()<CR>*
 nnoremap <unique> # :call HLNextSetTrigger()<CR>#
+
+function! MultipleHighlightAdd()
+  call MultipleHighlightInit()
+  let g:multiple_highlight_list += ['\<'.expand("<cword>").'\>']
+  let @/='\c\('.join(g:multiple_highlight_list, '\|').'\)'
+endfunction
+
+function! MultipleHighlightAddVisual() range
+  let l:saved_reg = @"
+  execute "normal! vgvy"
+  let l:pattern = escape(@", '\\/.*$^~[]')
+  let l:pattern = substitute(l:pattern, "\n$", "", "")
+  call MultipleHighlightInit()
+  let g:multiple_highlight_list += [l:pattern]
+  let @/='\c\('.join(g:multiple_highlight_list, '\|').'\)'
+  let @" = l:saved_reg
+endfunction
+
+function! MultipleHighlightOff()
+  if exists('g:multiple_highlight_list')
+    unlet g:multiple_highlight_list
+  endif
+endfunction
+
+function! MultipleHighlightInit()
+  if !exists('g:multiple_highlight_list')
+    let g:multiple_highlight_list = []
+  endif
+endfunction
 
 function! CopenToggle()
   let l:c = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
@@ -155,7 +189,9 @@ endfunction
 " Clear previous highlighting (if any)...
 function! HLNextOff ()
   if exists('w:HLNext_matchnum')
-    call matchdelete(w:HLNext_matchnum)
+    try
+      call matchdelete(w:HLNext_matchnum)
+    endtry
     unlet w:HLNext_matchnum
   endif
 endfunction
@@ -178,9 +214,9 @@ function! ColorOff()
   if exists('#auto_highlight')
     au! auto_highlight
     augroup! auto_highlight
-      setl updatetime&
-      echo 'Highlight current word: off'
-      return 0
+    setl updatetime&
+    echo 'Highlight current word: off'
+    return 0
   endif
   call HLNextOff()
   redraw!

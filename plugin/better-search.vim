@@ -48,9 +48,13 @@ command! QfLen :echo 'Total number of items: ' len(getqflist())
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 " nmap zh *``
 " nnoremap zj :call matchadd('IncSearch', '\c\<<C-R>=expand("<cword>")<CR>\>')<CR>
-nnoremap zh :let @/='\c\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>:echo @/<CR>
+" nnoremap zh :let @/='\c\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>:echo @/<CR>
+nnoremap zh :call MultipleHighlightOff()<CR>:call MultipleHighlightAdd()<CR>
+      \ :set hls<CR>:echo @/<CR>
 nnoremap zl :call MultipleHighlightAdd()<CR>:set hls<CR>:echo @/<CR>
-vnoremap zh :call VisualHighlightToggle()<Bar>set hls<CR>:echo @/<CR>
+" vnoremap zh :call VisualHighlightToggle()<Bar>set hls<CR>:echo @/<CR>
+vnoremap zl :call MultipleHighlightOff()<CR>:call MultipleHighlightAddVisual()<CR>
+      \ :set hls<CR>:echo @/<CR>
 vnoremap zl :call MultipleHighlightAddVisual()<Bar>:set hls<CR>:echo @/<CR>
 " Forward (with loop) substitution
 nnoremap <leader>rr :,$s//gc<BAR>1,''-&&<home><right><right><right><right>

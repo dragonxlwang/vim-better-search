@@ -53,7 +53,7 @@ nnoremap zh :call MultipleHighlightOff()<CR>:call MultipleHighlightAdd()<CR>
       \ :set hls<CR>:echo @/<CR>
 nnoremap zl :call MultipleHighlightAdd()<CR>:set hls<CR>:echo @/<CR>
 " vnoremap zh :call VisualHighlightToggle()<Bar>set hls<CR>:echo @/<CR>
-vnoremap zl :call MultipleHighlightOff()<CR>:call MultipleHighlightAddVisual()<CR>
+vnoremap zh :call MultipleHighlightOff()<CR>:call MultipleHighlightAddVisual()<CR>
       \ :set hls<CR>:echo @/<CR>
 vnoremap zl :call MultipleHighlightAddVisual()<Bar>:set hls<CR>:echo @/<CR>
 " Forward (with loop) substitution

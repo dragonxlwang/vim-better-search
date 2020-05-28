@@ -25,13 +25,13 @@
 
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :call ColorOff() \| :call clearmatches() \|
-        \ :call MultipleHighlightOff() \| :set nornu \| :noh \| :ccl
+        \ :call MultipleHighlightOff() \| :noh \| :ccl
         \<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
 " nnoremap <silent> <space> :call clearmatches() \| :set nornu \| :noh \|
 "       \call ColorOff() \| ccl<CR><ESC>
 nnoremap <silent> <space> :call ColorOff() \| :call clearmatches() \|
-      \ :call MultipleHighlightOff() \| :set nornu \| :noh \| :ccl<CR><ESC>
+      \ :call MultipleHighlightOff() \| :noh \| :ccl<CR><ESC>
 vnoremap <silent> * :call VisualSelection('f')<CR>:set hls<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>:set hls<CR>
 vnoremap <leader>gvf :call VisualSelection('gvf')<BAR>set hls<CR>

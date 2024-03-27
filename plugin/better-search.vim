@@ -68,9 +68,27 @@ nnoremap <unique> ? :call HLNextSetTrigger()<CR>?
 nnoremap <unique> * :call HLNextSetTrigger()<CR>*
 nnoremap <unique> # :call HLNextSetTrigger()<CR>#
 
+nnoremap zhh :call MultipleHighlightOff()<CR>:call ShiftLastHighlightWord(1)<CR>
+      \ :set hls<CR>:echo @/<CR>
+nnoremap zhl :call MultipleHighlightOff()<CR>:call ShiftLastHighlightWord(0)<CR>
+      \ :set hls<CR>:echo @/<CR>
+
+function! ShiftLastHighlightWord(is_left)
+  call MultipleHighlightInit()
+  if a:is_left
+    let s:last_search = s:last_search[1:]
+  else
+    let s:last_search = s:last_search[:-2]
+  endif
+  let g:multiple_highlight_list += [s:last_search]
+  let @/='\c\('.join(g:multiple_highlight_list, '\|').'\)'
+endfunction
+
+
 function! MultipleHighlightAdd()
   call MultipleHighlightInit()
-  let g:multiple_highlight_list += ['\<'.expand("<cword>").'\>']
+  let s:last_search = expand("<cword>")
+  let g:multiple_highlight_list += ['\<'.s:last_search.'\>']
   let @/='\c\('.join(g:multiple_highlight_list, '\|').'\)'
 endfunction
 

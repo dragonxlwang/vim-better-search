@@ -61,8 +61,8 @@ nnoremap <leader>rr :,$s//gc<BAR>1,''-&&<home><right><right><right><right>
 " Highlight current match different from others
 nnoremap <silent> <leader>n :cn<CR>:call HLNext()<CR>:set hls<CR>
 nnoremap <silent> <leader>N :cp<CR>:call HLNext()<CR>:set hls<CR>
-nnoremap <silent> n n:call HLNext()<CR>
-nnoremap <silent> N N:call HLNext()<CR>
+nnoremap <silent> n :call HLNext()<CR>n
+nnoremap <silent> N :call HLNext()<CR>N
 nnoremap <unique> / :call HLNextSetTrigger()<CR>/
 nnoremap <unique> ? :call HLNextSetTrigger()<CR>?
 nnoremap <unique> * :call HLNextSetTrigger()<CR>*
@@ -204,7 +204,7 @@ endfunction
 function! HLNext ()
   call HLNextOff()
   let target_pat = '\c\%#\%('.@/.'\)'
-  let @/ = '\c'.@/
+  " let @/ = '\c'.@/
   let w:HLNext_matchnum = matchadd('IncSearch', target_pat)
   redraw!
 endfunction

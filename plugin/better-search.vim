@@ -31,7 +31,9 @@ endif
 " nnoremap <silent> <space> :call clearmatches() \| :set nornu \| :noh \|
 "       \call ColorOff() \| ccl<CR><ESC>
 nnoremap <silent> <space> :call ColorOff() \| :call clearmatches() \|
-      \ :call MultipleHighlightOff() \| :noh \| :ccl<CR><ESC>
+      \ :call MultipleHighlightOff() \| :noh \|
+      \ :if exists("g:indentLine_loaded")<Bar>IndentLinesEnable<Bar>endif<CR> \|
+      \ :ccl<CR><ESC>
 vnoremap <silent> * :call VisualSelection('f')<CR>:set hls<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>:set hls<CR>
 vnoremap <leader>gvf :call VisualSelection('gvf')<BAR>set hls<CR>

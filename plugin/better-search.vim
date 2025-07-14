@@ -33,6 +33,7 @@ endif
 nnoremap <silent> <space> :call ColorOff() \| :call clearmatches() \|
       \ :call MultipleHighlightOff() \| :noh \|
       \ :if exists("g:indentLine_loaded")<Bar>IndentLinesEnable<Bar>endif<CR> \|
+      \ :setlocal rnu \| :setlocal nocuc \|
       \ :ccl<CR><ESC>
 vnoremap <silent> * :call VisualSelection('f')<CR>:set hls<CR>
 vnoremap <silent> # :call VisualSelection('b')<CR>:set hls<CR>
